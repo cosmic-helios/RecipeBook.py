@@ -23,4 +23,4 @@ else:
     print('*Database not found*')
     print('*Creating Database*')
     db_c = exe.execute('CREATE DATABASE Recipie_Book')
-    print("*Database Created*")
+
