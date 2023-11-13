@@ -50,6 +50,7 @@ if ('RECIPES',) not in tables_r :
     cur.execute("CREATE TABLE RECIPES(recipe_name varchar(255) primary key,cuisine varchar(255),country varchar(20))")
 
 def CHOICES():
+    print()
     print("---------------------------------------------------------------------------------")
     print('|                          WHAT ARE YOU HERE FOR TODAY?                         |')
     print('---------------------------------------------------------------------------------')
@@ -58,6 +59,31 @@ def CHOICES():
     print('|         Enter TRY if you want instructions to try a certain recipe            |')
     print('---------------------------------------------------------------------------------')
     print()
+    global choice
     choice = input("Enter your choice: ")
 
 CHOICES()
+
+def VIEW():
+    recipies = cur.execute('SELECT * FROM RECIPES')
+    recipies_r = cur.fetchall()
+    print(recipies_r)
+    filter = input('Do you want to filter the recipes? Y/N')
+    if filter.capitalize() == 'Y':
+        filter_2 = input("Enter Based On COUNTRY or CUISINE??  ")
+        print(filter_2)
+    if filter_2.capitalize() == 'CUISINE':
+        cuisine = input('ENTER CUISINE: ')
+        cuisine_e = cur.execute("SELECT * FROM RECIPES WHERE CUISINE = cuisine")
+        cuisine_r = cur.fetchall()
+        print(cuisine_r)
+            
+
+    
+
+if choice == 'VIEW':
+    VIEW()
+elif choice == 'ADD':
+    ADD()
+elif choice == 'TRY':
+    TRY()
