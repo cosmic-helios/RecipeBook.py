@@ -70,12 +70,13 @@ def VIEW():
     recipies_r = cur.fetchall()
     print(recipies_r)
     filter = input('Do you want to filter the recipes? Y/N')
-    if filter.capitalize() == 'Y':
+    if filter.upper() == 'Y':
         filter_2 = input("Enter Based On COUNTRY or CUISINE??  ")
         print(filter_2)
         if filter_2.upper() == 'CUISINE':
-            cuisine = input('ENTER CUISINE: ')
-            cuisine_e = cur.execute("SELECT * FROM RECIPES WHERE cuisine = 'cuisine'")
+            cuisine_i = input('ENTER CUISINE: ')
+            cuisine_i.upper()
+            cuisine_e = cur.execute("SELECT * FROM RECIPES") #WHERE cuisine = cuisine_i
             cuisine_r = cur.fetchall()
             print(cuisine_r)
             
@@ -84,7 +85,7 @@ def VIEW():
 
 if choice == 'VIEW':
     VIEW()
-elif choice == 'ADD':
+'''elif choice == 'ADD':
     ADD()
 elif choice == 'TRY':
-    TRY()
+    TRY()'''
