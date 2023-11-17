@@ -47,13 +47,13 @@ cur = mydb.cursor()
 tables = cur.execute("SHOW TABLES")
 tables_r = cur.fetchall()
 if ('RECIPES',) not in tables_r :
-    cur.execute("CREATE TABLE RECIPES(recipe_name varchar(255) primary key,cuisine varchar(255),country varchar(20))")
+    cur.execute("CREATE TABLE RECIPES(recipe_name varchar(255) primary key,cuisine varchar(255),country varchar(20)),calories(kcal) numeric")
 
 choice = ''
 def CHOICES():
     print()
     print("---------------------------------------------------------------------------------")
-    print('|                          WELCOME TO RECIPIE_BOOK, foodie                      |')
+    print('|                          WELCOME TO RECIPIE_BOOK                              |')
     print('---------------------------------------------------------------------------------')
     print("|                   Enter VIEW for viewing existing Recipies                    |")
     print('|             Enter ADD if you want to save your personal recipes               |')
@@ -78,7 +78,12 @@ def VIEW():
             cuisine_e = cur.execute("SELECT * FROM RECIPES") #WHERE cuisine = cuisine_i
             cuisine_r = cur.fetchall()
             print(cuisine_r)
-            
+        if filter_2.upper() == 'COUNTRY' :
+            country_i = input("Enter COUNTRY: ")
+            country_i.upper()
+            country_e = cur.execute("SELECT * FROM RECIPES WHERE country = 'country_i")
+            country_r = cur.fetchall()
+            print(country_r)
 
     
 
