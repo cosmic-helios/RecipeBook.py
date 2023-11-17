@@ -53,11 +53,10 @@ choice = ''
 def CHOICES():
     print()
     print("---------------------------------------------------------------------------------")
-    print('|                          WHAT ARE YOU HERE FOR TODAY?                         |')
+    print('|                          WELCOME TO RECIPIE_BOOK, foodie                      |')
     print('---------------------------------------------------------------------------------')
     print("|                   Enter VIEW for viewing existing Recipies                    |")
     print('|             Enter ADD if you want to save your personal recipes               |')
-    print('|         Enter TRY if you want instructions to try a certain recipe            |')
     print('---------------------------------------------------------------------------------')
     print()
     global choice
