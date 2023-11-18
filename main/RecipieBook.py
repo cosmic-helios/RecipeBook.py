@@ -61,35 +61,76 @@ def CHOICES():
     print()
     global choice
     choice = input("Enter your choice: ")
+    choice.upper()
 
 CHOICES()
 
+def fetch_recipes(r):
+    for i in range(len(r)):   
+            print("---------------------------------------------------------------------------------")
+            print("                                RECIPE #",i+1,"                                  ")
+            print("---------------------------------------------------------------------------------")
+            print('  Recipe Name: ',r[i][0],'                                                       ')
+            print('  Cuisine: ',r[i][1],'                                                           ')
+            print('  Country: ',r[i][2],'                                                           ')
+            print('  Calories(kcal): ',r[i][3],'                                                    ')
+            print("---------------------------------------------------------------------------------") 
+
 def VIEW():
+    print("-------------------------The Calories are in KCAL (100g)-------------------------")
+    print()
     recipies = cur.execute('SELECT * FROM RECIPES')
     recipies_r = cur.fetchall()
-    print(recipies_r)
-    filter = input('Do you want to filter the recipes? Y/N')
+    fetch_recipes(recipies_r)
+    filter = input('Do you want to filter the recipes? Y/N: ')
+    f = ['COUNTRY', 'CUISINE']
+    print()
+    print('Available Filters:',f)
     if filter.upper() == 'Y':
-        filter_2 = input("Enter Based On COUNTRY or CUISINE??  ")
-        print(filter_2)
+        f = ['COUNTRY', 'CUISINE']
+        print()
+        print('Available Filters:',f)
+        filter_2 = input("Enter A Filter: ")
         if filter_2.upper() == 'CUISINE':
+            print()
             cuisine_i = input('ENTER CUISINE: ')
             cuisine_i.upper()
-            cuisine_e = cur.execute("SELECT * FROM RECIPES") #WHERE cuisine = cuisine_i
+            cuisine_e = cur.execute(f"SELECT * FROM RECIPES WHERE cuisine = '{cuisine_i}'")
             cuisine_r = cur.fetchall()
-            print(cuisine_r)
+            fetch_recipes(cuisine_r)
         if filter_2.upper() == 'COUNTRY' :
             country_i = input("Enter COUNTRY: ")
             country_i.upper()
             country_e = cur.execute("SELECT * FROM RECIPES WHERE country = 'country_i")
             country_r = cur.fetchall()
-            print(country_r)
+            fetch_recipes(country_r)
 
-    
+def ADD():
+    print("---------------------------------------------------------------------------------")
+    print("                         Enter the calories in kcal (100g)                       ")
+    print("---------------------------------------------------------------------------------")
+    print()
+    name = input(' Enter Recipe Name: ')
+    print()
+    cuisine = input(" Enter cuisine of the recipe: ")
+    cuisine.upper()
+    print()
+    country = input(" Enter the origin of the recipe: ")
+    country.upper()
+    print()
+    calories = int(input(" Enter calories in kcal: "))
+    print()
+    print("---------------------------------------------------------------------------------")
+    add_recipe = f"INSERT INTO RECIPES VALUES('{name}', '{cuisine}', '{country}', {calories})"
+    add = cur.execute(add_recipe)
+    print("                              Recipe Added :)                                    ")
+    mydb.commit()
+
 
 if choice == 'VIEW':
     VIEW()
-'''elif choice == 'ADD':
+elif choice == 'ADD':
     ADD()
-elif choice == 'TRY':
-    TRY()'''
+else:
+    ("                                Enter A Valid Option                                  ")
+    CHOICES()
