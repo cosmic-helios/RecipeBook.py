@@ -1,10 +1,14 @@
+#User login
+username = input('Enter Username')
+password = input('Enter Password')
+
 #Importing MYSQL Connector
 import mysql.connector as cnt
 
 #Establishing the connection with MYSQL
 mysql = cnt.connect(host = 'localhost',
-                               user = 'aurelius',
-                               password = 'aurelius.141')
+                               user = 'root',
+                               password = 'root')
 
 #Checking for the desired database and creating it otherwise
 if mysql.is_connected():
@@ -23,8 +27,8 @@ def database():
     print("Changing Database")
     global mydb
     mydb = cnt.connect(host = 'localhost',
-                               user = 'aurelius',
-                               password = 'aurelius.141',
+                               user = 'root',
+                               password = 'root',
                                database = 'Recipe_Book')
     if mydb.is_connected():
         print("---------------------------------------------------------------------------------")
