@@ -1,7 +1,3 @@
-#User login
-username = input('Enter Username')
-password = input('Enter Password')
-
 #Importing MYSQL Connector
 import mysql.connector as cnt
 
@@ -29,21 +25,21 @@ def database():
     mydb = cnt.connect(host = 'localhost',
                                user = 'root',
                                password = 'root',
-                               database = 'Recipe_Book')
+                               database = 'recipe_book')
     if mydb.is_connected():
         print("---------------------------------------------------------------------------------")
-        print("|               ### Connection Established with Recipie_Book ###                |")
+        print("|                ### Connection Established with recipe_book ###                |")
         print("---------------------------------------------------------------------------------")
     else:
         print("Connection Failed")
    
-if ('Recipe_Book',) in db_r:
+if ('recipe_book',) in db_r:
     print('*Database Exists*')
     database()
 else:
     print('*Database not found*')
     print('*Creating Database*')
-    db_c = exe.execute('CREATE DATABASE Recipe_Book')
+    db_c = exe.execute('CREATE DATABASE recipe_book')
     database()
 
 cur = mydb.cursor()
@@ -51,7 +47,7 @@ cur = mydb.cursor()
 tables = cur.execute("SHOW TABLES")
 tables_r = cur.fetchall()
 if ('RECIPES',) not in tables_r :
-    cur.execute("CREATE TABLE RECIPES(recipe_name varchar(255) primary key,cuisine varchar(255),country varchar(20)),calories(kcal) numeric")
+    cur.execute("CREATE TABLE RECIPES(recipe_name varchar(255) primary key,cuisine varchar(255),country varchar(20),calories_kcal int)")
 
 choice = ''
 def CHOICES():
