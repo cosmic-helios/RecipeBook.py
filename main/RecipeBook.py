@@ -20,7 +20,7 @@ db = exe.execute("SHOW DATABASES")
 db_r = exe.fetchall()
 
 def database():
-    print("Changing Database")
+    print("### Changing Database ###")
     global mydb
     mydb = cnt.connect(host = 'localhost',
                                user = 'root',
@@ -31,15 +31,16 @@ def database():
         print("|                ### Connection Established with recipe_book ###                |")
         print("+-------------------------------------------------------------------------------+")
     else:
-        print("Connection Failed")
+        print("### Connection Failed ###")
    
 if ('recipe_book',) in db_r:
-    print('*Database Exists*')
+    print('### Database Exists ###')
     database()
 else:
-    print('*Database not found*')
-    print('*Creating Database*')
+    print('### Database not found ###')
+    print('### Creating Database ###')
     db_c = exe.execute('CREATE DATABASE recipe_book')
+    print('### Database Created ###')
     database()
 
 cur = mydb.cursor()
@@ -57,6 +58,7 @@ def CHOICES():
     print('+-------------------------------------------------------------------------------+')
     print("|                   Enter VIEW for viewing existing Recipies                    |")
     print('|             Enter ADD if you want to save your personal recipes               |')
+    print('|                        Enter X if you want to quit                            |')
     print('+-------------------------------------------------------------------------------+')
     print()
     global choice
@@ -77,6 +79,7 @@ def fetch_recipes(r):
             print("---------------------------------------------------------------------------------") 
 
 def VIEW():
+    print()
     print("-------------------------The Calories are in KCAL (100g)-------------------------")
     print()
     recipies = cur.execute('SELECT * FROM RECIPES')
@@ -103,6 +106,7 @@ def VIEW():
             country_e = cur.execute(f"SELECT * FROM RECIPES WHERE country = '{country_i}'")
             country_r = cur.fetchall()
             fetch_recipes(country_r)
+        VIEW()
 
 def ADD():
     print("---------------------------------------------------------------------------------")
@@ -130,11 +134,26 @@ def ADD():
         VIEW()
     mydb.commit()
 
+def DEL():
+    recipies = cur.execute('SELECT * FROM RECIPES')
+    recipies_r = cur.fetchall()
+    fetch_recipes(recipies_r)
+    recipe_d = input("Enter name of the Recipe to Delete")
+    del_exe = f"DELETE FROM RECIPES WHERE recipe_name = '{recipe_d}'"
+    cur.execute(del_exe)
+    print("Recipe Deleted :(")
+    mydb.commit()
 
+choice.upper()
 if choice == 'VIEW':
     VIEW()
 elif choice == 'ADD':
     ADD()
+elif choice == 'X':
+    print()
+    print(" Arigato :)")
+elif choice == 'DEL':
+    DEL()
 else:
     ("                                Enter A Valid Option                                  ")
     CHOICES()
