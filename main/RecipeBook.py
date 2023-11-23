@@ -8,12 +8,12 @@ mysql = cnt.connect(host = 'localhost',
 
 #Checking for the desired database and creating it otherwise
 if mysql.is_connected():
-    print("---------------------------------------------------------------------------------")
+    print("+-------------------------------------------------------------------------------+")
     print("|                 ### Connection Established with MYSQL ###                     |")
-    print("---------------------------------------------------------------------------------")
+    print("+-------------------------------------------------------------------------------+")
 
 else:
-    print("### Connection Failed ###")
+    print("|                    ### Connection Failed with MYSQL ###                       |")
 exe = mysql.cursor()
 
 db = exe.execute("SHOW DATABASES")
@@ -27,9 +27,9 @@ def database():
                                password = 'root',
                                database = 'recipe_book')
     if mydb.is_connected():
-        print("---------------------------------------------------------------------------------")
+        print("+-------------------------------------------------------------------------------+")
         print("|                ### Connection Established with recipe_book ###                |")
-        print("---------------------------------------------------------------------------------")
+        print("+-------------------------------------------------------------------------------+")
     else:
         print("Connection Failed")
    
@@ -52,12 +52,12 @@ if ('RECIPES',) not in tables_r :
 choice = ''
 def CHOICES():
     print()
-    print("---------------------------------------------------------------------------------")
+    print("+-------------------------------------------------------------------------------+")
     print('|                          WELCOME TO RECIPIE_BOOK                              |')
-    print('---------------------------------------------------------------------------------')
+    print('+-------------------------------------------------------------------------------+')
     print("|                   Enter VIEW for viewing existing Recipies                    |")
     print('|             Enter ADD if you want to save your personal recipes               |')
-    print('---------------------------------------------------------------------------------')
+    print('+-------------------------------------------------------------------------------+')
     print()
     global choice
     choice = input("Enter your choice: ")
@@ -85,7 +85,6 @@ def VIEW():
     filter = input('Do you want to filter the recipes? Y/N: ')
     f = ['COUNTRY', 'CUISINE']
     print()
-    print('Available Filters:',f)
     if filter.upper() == 'Y':
         f = ['COUNTRY', 'CUISINE']
         print()
@@ -101,7 +100,7 @@ def VIEW():
         if filter_2.upper() == 'COUNTRY' :
             country_i = input("Enter COUNTRY: ")
             country_i.upper()
-            country_e = cur.execute("SELECT * FROM RECIPES WHERE country = 'country_i")
+            country_e = cur.execute(f"SELECT * FROM RECIPES WHERE country = '{country_i}'")
             country_r = cur.fetchall()
             fetch_recipes(country_r)
 
@@ -123,7 +122,12 @@ def ADD():
     print("---------------------------------------------------------------------------------")
     add_recipe = f"INSERT INTO RECIPES VALUES('{name}', '{cuisine}', '{country}', {calories})"
     add = cur.execute(add_recipe)
+    print()
     print("                              Recipe Added :)                                    ")
+    print()
+    recipe_c = input("Would you like to view all the Added Recipes? Y/N")
+    if recipe_c.upper() == 'Y':
+        VIEW()
     mydb.commit()
 
 
