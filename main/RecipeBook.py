@@ -106,7 +106,9 @@ def VIEW():
             country_e = cur.execute(f"SELECT * FROM RECIPES WHERE country = '{country_i}'")
             country_r = cur.fetchall()
             fetch_recipes(country_r)
-        VIEW()
+    recipies = cur.execute('SELECT * FROM RECIPES')
+    recipies_r = cur.fetchall()
+    fetch_recipes(recipies_r)
 
 def ADD():
     print("---------------------------------------------------------------------------------")
@@ -131,7 +133,11 @@ def ADD():
     print()
     recipe_c = input("Would you like to view all the Added Recipes? Y/N")
     if recipe_c.upper() == 'Y':
-        VIEW()
+        recipes_a = f"SELECT * FROM RECIPES WHERE recipe_name = '{name}'"
+        recipes_ae = cur.execute(recipes_a)
+        recipe_ar = cur.fetchall(recipes_ae)
+        print(recipe_ar)
+
     mydb.commit()
 
 def DEL():
