@@ -106,9 +106,7 @@ def VIEW():
             country_e = cur.execute(f"SELECT * FROM RECIPES WHERE country = '{country_i}'")
             country_r = cur.fetchall()
             fetch_recipes(country_r)
-    recipies = cur.execute('SELECT * FROM RECIPES')
-    recipies_r = cur.fetchall()
-    fetch_recipes(recipies_r)
+    
 
 def ADD():
     print("---------------------------------------------------------------------------------")
@@ -149,6 +147,9 @@ def DEL():
     cur.execute(del_exe)
     print("Recipe Deleted :(")
     mydb.commit()
+
+def tq():
+    print(" Arigato :)")
 
 choice.upper()
 if choice == 'VIEW':
