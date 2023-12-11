@@ -49,8 +49,13 @@ tables = cur.execute("SHOW TABLES")
 tables_r = cur.fetchall()
 if ('RECIPES',) not in tables_r :
     cur.execute("CREATE TABLE RECIPES(recipe_name varchar(255) primary key,cuisine varchar(255),country varchar(20),calories_kcal int)")
+if ('nutrition',) not in tables_r:
+    cur.execute("CREATE TABLE nutrition(recipe_name varchar(255) primary key,carbohydrates int,fats int,proteins int,vitamins int,minerals int)")
 
 choice = ''
+
+#defining functions
+
 def CHOICES():
     print()
     print("+-------------------------------------------------------------------------------+")
@@ -59,13 +64,12 @@ def CHOICES():
     print("|                   Enter VIEW for viewing existing Recipies                    |")
     print('|             Enter ADD if you want to save your personal recipes               |')
     print('|                        Enter X if you want to quit                            |')
+    print('|                      Enter DEL to Delete a recipie                            |')
     print('+-------------------------------------------------------------------------------+')
     print()
     global choice
     choice = input("Enter your choice: ")
     choice.upper()
-
-CHOICES()
 
 def fetch_recipes(r):
     for i in range(len(r)):   
@@ -78,37 +82,62 @@ def fetch_recipes(r):
             print('  Calories(kcal): ',r[i][3],'                                                    ')
             print("---------------------------------------------------------------------------------") 
 
+def fetch_nutrition(nutri):
+    if len(nutri) == 0:
+        print("No records found for Nutrition")
+    else :
+        for i in range(len(nutri)):
+                print("---------------------------------------------------------------------------------")
+                print("                                RECIPE #",i+1,"                                  ")
+                print("---------------------------------------------------------------------------------")
+                print('  Recipe Name: ',nutri[i][0],'                                                       ')
+                print('  Carbohydrates: ',nutri[i][1],'                                                           ')
+                print('  Fats: ',nutri[i][2],'                                                           ')
+                print('  Proteins: ',nutri[i][3],'                                                    ')
+                print('  Vitamins: ',nutri[i][4],'                                                    ')
+                print('  Minerals: ',nutri[i][5],'                                                    ')
+                print("---------------------------------------------------------------------------------") 
+
 def VIEW():
-    print()
-    print("-------------------------The Calories are in KCAL (100g)-------------------------")
-    print()
     recipies = cur.execute('SELECT * FROM RECIPES')
     recipies_r = cur.fetchall()
-    fetch_recipes(recipies_r)
-    filter = input('Do you want to filter the recipes? Y/N: ')
-    f = ['COUNTRY', 'CUISINE']
-    print()
-    if filter.upper() == 'Y':
+    if len(recipies_r) == 0:
+        print("No Recipes Found")
+    else:
+        print()
+        print("-------------------------The Calories are in KCAL (100g)-------------------------")
+        print()
+        recipies = cur.execute('SELECT * FROM RECIPES')
+        recipies_r = cur.fetchall()
+        fetch_recipes(recipies_r)
+        nutri_e = cur.execute('SELECT * FROM nutrition')
+        nutri_r = cur.fetchall()
+        fetch_nutrition(nutri_r)
+        filter = input('Do you want to filter the recipes? Y/N: ')
         f = ['COUNTRY', 'CUISINE']
         print()
-        print('Available Filters:',f)
-        filter_2 = input("Enter A Filter: ")
-        if filter_2.upper() == 'CUISINE':
+        if filter.upper() == 'Y':
+            f = ['COUNTRY', 'CUISINE']
             print()
-            cuisine_i = input('ENTER CUISINE: ')
-            cuisine_i.upper()
-            cuisine_e = cur.execute(f"SELECT * FROM RECIPES WHERE cuisine = '{cuisine_i}'")
-            cuisine_r = cur.fetchall()
-            fetch_recipes(cuisine_r)
-        if filter_2.upper() == 'COUNTRY' :
-            country_i = input("Enter COUNTRY: ")
-            country_i.upper()
-            country_e = cur.execute(f"SELECT * FROM RECIPES WHERE country = '{country_i}'")
-            country_r = cur.fetchall()
-            fetch_recipes(country_r)
-    
+            print('Available Filters:',f)
+            filter_2 = input("Enter A Filter: ")
+            if filter_2.upper() == 'CUISINE':
+                print()
+                cuisine_i = input('ENTER CUISINE: ')
+                cuisine_i.upper()
+                cuisine_e = cur.execute(f"SELECT * FROM RECIPES WHERE cuisine = '{cuisine_i}'")
+                cuisine_r = cur.fetchall()
+                fetch_recipes(cuisine_r)
+            if filter_2.upper() == 'COUNTRY' :
+                country_i = input("Enter COUNTRY: ")
+                country_i.upper()
+                country_e = cur.execute(f"SELECT * FROM RECIPES WHERE country = '{country_i}'")
+                country_r = cur.fetchall()
+                fetch_recipes(country_r)
+        tq()
 
 def ADD():
+    global name
     print("---------------------------------------------------------------------------------")
     print("                         Enter the calories in kcal (100g)                       ")
     print("---------------------------------------------------------------------------------")
@@ -126,6 +155,9 @@ def ADD():
     print("---------------------------------------------------------------------------------")
     add_recipe = f"INSERT INTO RECIPES VALUES('{name}', '{cuisine}', '{country}', {calories})"
     add = cur.execute(add_recipe)
+    
+    nutrition(name)
+    
     print()
     print("                              Recipe Added :)                                    ")
     print()
@@ -133,34 +165,56 @@ def ADD():
     if recipe_c.upper() == 'Y':
         recipes_a = f"SELECT * FROM RECIPES WHERE recipe_name = '{name}'"
         recipes_ae = cur.execute(recipes_a)
-        recipe_ar = cur.fetchall(recipes_ae)
-        print(recipe_ar)
-
+        recipe_ar = cur.fetchall()
+        fetch_recipes(recipe_ar)
+    tq()
     mydb.commit()
 
 def DEL():
     recipies = cur.execute('SELECT * FROM RECIPES')
     recipies_r = cur.fetchall()
     fetch_recipes(recipies_r)
-    recipe_d = input("Enter name of the Recipe to Delete")
+    recipe_d = input("Enter name of the Recipe to Delete: ")
     del_exe = f"DELETE FROM RECIPES WHERE recipe_name = '{recipe_d}'"
     cur.execute(del_exe)
     print("Recipe Deleted :(")
     mydb.commit()
 
+def nutrition(name):
+    print()
+    print("---------------------------------------------------------------------------------")
+    print("                     Enter the nutritional values per (100g)                     ")
+    print("---------------------------------------------------------------------------------")
+    print()
+    carbs = int(input(' Enter Carbohydrates: '))
+    print()
+    fats = int(input(" Enter Fats: "))
+    print()
+    proteins = int(input(" Enter Proteins : "))
+    print()
+    vitamins = int(input(" Enter Vitamins: "))
+    print()
+    minerals =  int(input("Enter Minerals: "))
+    print("---------------------------------------------------------------------------------")
+    add_nutri = f"INSERT INTO nutrition VALUES('{name}', {carbs}, {fats}, {proteins}, {vitamins}, {minerals})"
+    cur.execute(add_nutri)
+
 def tq():
     print(" Arigato :)")
 
-choice.upper()
-if choice == 'VIEW':
-    VIEW()
-elif choice == 'ADD':
+#Calling the fuctions
+
+CHOICES()
+
+if choice.upper() == 'VIEW':
+        VIEW()
+elif choice.upper() == 'ADD':
     ADD()
-elif choice == 'X':
+elif choice.upper() == 'X':
     print()
     print(" Arigato :)")
-elif choice == 'DEL':
-    DEL()
+elif choice.upper() == 'DEL':
+      DEL()
 else:
-    ("                                Enter A Valid Option                                  ")
+    print("                                Enter A Valid Option                                  ")
     CHOICES()
