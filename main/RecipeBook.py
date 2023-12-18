@@ -9,11 +9,11 @@ mysql = cnt.connect(host = 'localhost',
 #Checking for the desired database and creating it otherwise
 if mysql.is_connected():
     print("+-------------------------------------------------------------------------------+")
-    print("|                 ### Connection Established with MYSQL ###                     |")
+    print("                  ### Connection Established with MYSQL ###                      ")
     print("+-------------------------------------------------------------------------------+")
 
 else:
-    print("|                    ### Connection Failed with MYSQL ###                       |")
+    print("                     ### Connection Failed with MYSQL ###                        ")
 exe = mysql.cursor()
 
 db = exe.execute("SHOW DATABASES")
@@ -28,7 +28,7 @@ def database():
                                database = 'recipe_book')
     if mydb.is_connected():
         print("+-------------------------------------------------------------------------------+")
-        print("|                ### Connection Established with recipe_book ###                |")
+        print("                 ### Connection Established with recipe_book ###                 ")
         print("+-------------------------------------------------------------------------------+")
     else:
         print("### Connection Failed ###")
@@ -59,17 +59,19 @@ choice = ''
 def CHOICES():
     print()
     print("+-------------------------------------------------------------------------------+")
-    print('|                          WELCOME TO RECIPIE_BOOK                              |')
+    print('                           WELCOME TO RECIPIE_BOOK                               ')
     print('+-------------------------------------------------------------------------------+')
-    print("|                   Enter VIEW for viewing existing Recipies                    |")
-    print('|             Enter ADD if you want to save your personal recipes               |')
-    print('|                        Enter X if you want to quit                            |')
-    print('|                      Enter DEL to Delete a recipie                            |')
+    print("                    Enter VIEW for viewing existing Recipies                     ")
+    print('              Enter ADD if you want to save your personal recipes                ')
+    print('                         Enter X if you want to quit                             ')
+    print('                       Enter DEL to Delete a recipie                             ')
     print('+-------------------------------------------------------------------------------+')
     print()
     global choice
     choice = input("Enter your choice: ")
     choice.upper()
+
+#Defining Fetch Recipe Module
 
 def fetch_recipes(r):
     for i in range(len(r)):   
@@ -81,6 +83,8 @@ def fetch_recipes(r):
             print('  Country: ',r[i][2],'                                                           ')
             print('  Calories(kcal): ',r[i][3],'                                                    ')
             print("---------------------------------------------------------------------------------") 
+
+#Defining Fetch Nutrition Module
 
 def fetch_nutrition(nutri):
     if len(nutri) == 0:
@@ -97,6 +101,8 @@ def fetch_nutrition(nutri):
                 print('  Vitamins: ',nutri[i][4],'                                                    ')
                 print('  Minerals: ',nutri[i][5],'                                                    ')
                 print("---------------------------------------------------------------------------------") 
+
+#Defining VIEW Module
 
 def VIEW():
     recipies = cur.execute('SELECT * FROM RECIPES')
@@ -136,6 +142,8 @@ def VIEW():
                 fetch_recipes(country_r)
         tq()
 
+#Defining ADD Module
+
 def ADD():
     global name
     print("---------------------------------------------------------------------------------")
@@ -170,6 +178,8 @@ def ADD():
     tq()
     mydb.commit()
 
+#Defining Delete Module
+
 def DEL():
     recipies = cur.execute('SELECT * FROM RECIPES')
     recipies_r = cur.fetchall()
@@ -179,6 +189,8 @@ def DEL():
     cur.execute(del_exe)
     print("Recipe Deleted :(")
     mydb.commit()
+
+#Defining Nutrition Module
 
 def nutrition(name):
     print()
